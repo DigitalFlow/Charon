@@ -4,29 +4,32 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AppConfiguration.fs" />
-    <Compile Include="Bootstrapper.fs" />
-    <Compile Include="Startup.fs" />
-    <Compile Include="HomeModule.fs" />
+    <Compile Include="Bootstrapping/AppConfiguration.fs" />
+    <Compile Include="Bootstrapping/Bootstrapper.fs" />
+    <Compile Include="Bootstrapping/Startup.fs" />
+    <Compile Include="Data/ProjectTask.fs" />
+    <Compile Include="Data/DatabaseConnector.fs" />
+    <Compile Include="Modules/HomeModule.fs" />
+    <Compile Include="Modules/TaskModule.fs" />
     <Compile Include="Program.fs" />
-  </ItemGroup>
-  <ItemGroup> 
-    <Content Include="Views\**"> 
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
+    <Content Include="Views/**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\**"> 
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
+    <Content Include="Content/**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="appsettings.json"> 
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="LiteDB" Version="4.1.4" />
+    <PackageReference Include="LiteDb.FSharp" Version="2.10.1" />
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
     <PackageReference Include="Nancy" Version="2.0.0" />
     <PackageReference Include="Nancy.Owin" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 </Project>
