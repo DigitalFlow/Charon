@@ -1,0 +1,39 @@
+{
+  "name": "oss.charon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tslint": "tslint --fix -c tslint.json -p tsconfig.json",
+    "prebuild": "npm run tslint",
+    "build": "tsc -t ES6 -m commonjs --jsx react --outDir ./dist && webpack",
+    "postbuild": "npm run copyBootstrap && npm run copyReact && npm run copyReactDom",
+    "copyBootstrap": "cpx node_modules/bootstrap/dist/css/bootstrap.min.css ../server/Content",
+    "copyReact": "cpx node_modules/react/umd/react.production.min.js ../server/Content",
+    "copyReactDom": "cpx node_modules/react-dom/umd/react-dom.production.min.js ../server/Content"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^3.4.1",
+    "cpx": "^1.5.0",
+    "css-loader": "latest",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-trello": "^2.1.3",
+    "style-loader": "^0.23.1"
+  },
+  "devDependencies": {
+    "@types/react": "^16.0.0",
+    "@types/react-bootstrap": "^0.31.9",
+    "@types/react-dom": "^16.0.0",
+    "awesome-typescript-loader": "latest",
+    "react-bootstrap": "^0.31.5",
+    "source-map-loader": "^0.2.4",
+    "styled-components": "^4.2.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5",
+    "webpack": "^4.31.0",
+    "webpack-command": "^0.4.2"
+  }
+}
