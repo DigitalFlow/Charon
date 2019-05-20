@@ -48,10 +48,34 @@ export default class App extends React.PureComponent<any, AppState> {
           },
           {
             id: "lane2",
+            title: "Active Tasks",
+            label: "0/0",
+            cards: [
+              {id: "Card2", title: "Demo Active", description: "This is currently being worked on", label: "5 mins", metadata: {sha: "be312a1"}}
+            ]
+          },
+          {
+            id: "lane2",
+            title: "Test Tasks",
+            label: "0/0",
+            cards: [
+              {id: "Card2", title: "Demo Test", description: "This task is being tested", label: "5 mins", metadata: {sha: "be312a1"}}
+            ]
+          },
+          {
+            id: "lane2",
+            title: "Release Tasks",
+            label: "0/0",
+            cards: [
+              {id: "Card2", title: "Release Test", description: "Ready for release task", label: "5 mins", metadata: {sha: "be312a1"}}
+            ]
+          },
+          {
+            id: "lane2",
             title: "Completed",
             label: "0/0",
             cards: [
-              {id: "Card2", title: "Pay Rent", description: "Transfer via NEFT", label: "5 mins", metadata: {sha: "be312a1"}}
+              {id: "Card2", title: "Completed", description: "Done, awesome!", label: "5 mins", metadata: {sha: "be312a1"}}
             ]
           }
         ]
