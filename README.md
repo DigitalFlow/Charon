@@ -10,3 +10,5 @@ If configured, Charon also allows others to see what you're working on and to ga
 
 There is a swim lane task board where you can track your current work by status.
 Planning tasks by day and other smart features such as tracking the time you worked on tasks is in work as well.
+
+![Charon_Demo](https://user-images.githubusercontent.com/4287938/58034561-21a65280-7b27-11e9-9b38-a2aeaddfc335.png)
