@@ -29,6 +29,8 @@ type TaskModule() as this =
             let json = JsonConvert.DeserializeObject<ProjectTask>(data)
 
             DatabaseConnector.UpdateTask(json) |> ignore
-            this.Response.AsText("")
+            
+            let response = { id = json.Id.ToString() }
+            this.Response.AsJson(response)
         )
         this.Get("/tasks", fun _ -> this.Response.AsJson(DatabaseConnector.RetrieveTasks()))

@@ -9,6 +9,10 @@ module.exports = {
         publicPath: "",
     },
 
+    optimization: {
+        minimize: false
+    },
+
     // Enable sourcemaps for debugging webpack"s output.
     devtool: "source-map",
 

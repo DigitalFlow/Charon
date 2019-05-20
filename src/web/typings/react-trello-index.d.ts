@@ -62,6 +62,12 @@ declare module ReactTrello {
          * Callback function triggered when card drag is started: handleDragStart(cardId, laneId)
          */
         handleDragStart?: (cardId: string, laneId: string) => void;
+
+        /**
+         * Callback function triggered when data changes
+         */
+        updateBoard?: (data: ReactTrello.BoardData<any>) => void;
+
         /**
          * Callback function triggered when card drag ends: handleDragEnd(cardId, sourceLaneId, targetLaneId, position, cardDetails)
          */

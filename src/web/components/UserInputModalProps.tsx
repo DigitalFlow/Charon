@@ -3,7 +3,6 @@ import { Modal, Button } from "react-bootstrap";
 
 interface UserInputModalProps {
   title: string;
-  text: string;
   show: boolean;
   yesCallBack?: (value: string) => void;
   noCallBack?: () => void;
@@ -60,8 +59,7 @@ export default class UserInputModal extends React.PureComponent<UserInputModalPr
           </Modal.Header>
 
           <Modal.Body>
-            <p>{ this.props.text }</p>
-            <input type="text" value={ this.state.value } onChange={ this.setValue }/>
+            {this.props.children}
           </Modal.Body>
 
           <Modal.Footer>
