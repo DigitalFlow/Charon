@@ -8,7 +8,7 @@
 
         [<EntryPoint>]
         let main argv =
-            let host = WebHostBuilder().UseContentRoot(Directory.GetCurrentDirectory()).UseKestrel().UseStartup<Startup>().Build();
+            let host = WebHostBuilder().UseContentRoot(Directory.GetCurrentDirectory()).UseKestrel().UseStartup<Startup>().UseUrls("http://+:5000").Build();
 
             host.Run();
             0

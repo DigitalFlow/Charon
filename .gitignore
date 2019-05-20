@@ -42,3 +42,4 @@ paket-files/*
 **/dist/*
 temp/*
 **/Content/*
+**/Charon.data.db
