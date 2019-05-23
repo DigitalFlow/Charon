@@ -3,12 +3,15 @@ import { Navbar, Nav, Button, Card, Col, Row, Form } from "react-bootstrap";
 import Board from "react-trello";
 import TaskForm from "./TaskForm";
 import { ProjectTask } from "../domain/ProjectTask";
+import UserInputModal from "./UserInputModalProps";
+import { CustomCard } from "./CustomCard";
 
 interface AppState {
   showTaskForm?: boolean;
 
   boardData?: ReactTrello.BoardData<ProjectTask>;
   task?: ProjectTask;
+  showDeletionVerification?: boolean;
 }
 
 export default class App extends React.PureComponent<any, AppState> {
@@ -84,7 +87,7 @@ export default class App extends React.PureComponent<any, AppState> {
       this.setState({showTaskForm: false, task: undefined});
     }
 
-    submitTask = () => {
+    submitTask = (refreshAfterwards = true) => {
       const task = { ...this.state.task };
 
       (task.dueDate as any) = task.dueDate ? { "case": "Some", "fields": [task.dueDate] } : { "case": "None" };
@@ -96,7 +99,7 @@ export default class App extends React.PureComponent<any, AppState> {
       fetch("/tasks", { method: task.id ? "PATCH" : "POST", body: JSON.stringify(task) })
       .then(result => result.json())
       .then(result => {
-        this.setState({task: undefined}, this.fetchData);
+        this.setState({task: undefined}, () => refreshAfterwards && this.fetchData);
       });
     }
 
@@ -104,11 +107,11 @@ export default class App extends React.PureComponent<any, AppState> {
       this.setState({task: task}, callback);
     }
 
-    onCardClick = (cardId: string, metadata: any, laneId: string) => {
-      const lane = this.state.boardData.lanes.find(l => l.id === laneId);
+    findCard = (cardId: string, laneId: string) => this.state.boardData.lanes.find(l => l.id === laneId).cards.find(t => t.id.toString() === cardId).metadata;
 
+    onCardClick = (cardId: string, metadata: any, laneId: string) => {
       this.setState({
-        task: lane.cards.find(t => t.id.toString() === cardId).metadata,
+        task: this.findCard(cardId, laneId),
         showTaskForm: true
       });
     }
@@ -117,10 +120,53 @@ export default class App extends React.PureComponent<any, AppState> {
       this.setState({ boardData: data });
     }
 
+    verifyDeletion = (cardId: string, laneId: string) => {
+      this.setState({ showDeletionVerification: true, task: this.findCard(cardId, laneId) });
+    }
+
+    deleteTask = () => {
+      fetch("/tasks", { method: "DELETE", body: JSON.stringify({ id: this.state.task.id }) })
+      .then(result => result.json())
+      .then(result => {
+        this.setState({ task: undefined }, this.fetchData);
+      });
+    }
+
+    hideDeletionVerification = () => {
+      this.setState({ showDeletionVerification: false });
+    }
+
+    onDragEnd = (cardId: string, sourceLaneId: string, targetLaneId: string, position: number, card: ReactTrello.Card<ProjectTask>) => {
+      const targetCard = card.metadata;
+
+      if (sourceLaneId === targetLaneId) {
+        return;
+      }
+
+      const sourceLane = this.state.boardData.lanes.find(l => l.id === sourceLaneId);
+      const targetLane = this.state.boardData.lanes.find(l => l.id === targetLaneId);
+
+      const newSourceLane = { ...sourceLane, cards: sourceLane.cards.filter(c => c.id !== cardId) };
+      const newTargetLane = { ...targetLane, cards: [...targetLane.cards, card] };
+
+      const update = { lanes: this.state.boardData.lanes.map(l => l.id === sourceLaneId ? newSourceLane : (l.id === targetLaneId ? newTargetLane : l)) };
+
+      targetCard.phase = targetLane.id;
+      targetCard.order = position;
+
+      this.setState({
+        boardData: update,
+        task: targetCard
+      }, () => this.submitTask(false));
+    }
+
     render() {
         return (
           <div>
             <TaskForm task={this.state.task} showTaskForm={this.state.showTaskForm} updateTask={this.updateTask} submitTask={this.submitTask} hideTaskForm={this.hideTaskForm} />
+            <UserInputModal title="Verify Task Deletion" yesCallBack={this.deleteTask} finally={this.hideDeletionVerification} show={this.state.showDeletionVerification}>
+              <div>Are you sure you want to delete task '{this.state.task && this.state.task.name}' (ID: {this.state.task && this.state.task.id})?</div>
+            </UserInputModal>
             <Navbar bg="dark" variant="dark">
               <Navbar.Brand href="/">
                 <img alt ="" src="/content/icons8-drachenboot-48.png" width="48" height="48" className="d-inline-block align-top" />
@@ -136,9 +182,14 @@ export default class App extends React.PureComponent<any, AppState> {
               cardDragClass="draggingCard"
               laneDragClass="draggingLane"
               onCardClick={this.onCardClick}
+              onCardDelete={this.verifyDeletion}
+              handleDragEnd={this.onDragEnd}
               updateBoard={this.updateBoard}
               draggable
-            />
+              customCardLayout
+            >
+              <CustomCard deleteCallback={this.verifyDeletion} />
+            </Board>
             <Card bg="dark">
               <Row className="justify-content-center">
                   <a href="https://icons8.com/icon/71493/drachenboot">Drachenboot icon by Icons8</a>

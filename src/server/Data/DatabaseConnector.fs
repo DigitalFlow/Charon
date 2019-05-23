@@ -24,3 +24,8 @@ type DatabaseConnector private() =
     static member RetrieveById(id: int) =
         let tasks = DatabaseConnector.Db.GetCollection<ProjectTask>("tasks")
         tasks.FindById(BsonValue(id))
+
+    static member DeleteTask(id: int) =
+        let tasks = DatabaseConnector.Db.GetCollection<ProjectTask>("tasks")
+        let id = BsonValue(id)
+        tasks.Delete(id)
