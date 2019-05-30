@@ -9,26 +9,18 @@ interface UserInputModalProps {
   finally?: () => void;
 }
 
-export interface UserInputState {
-  value: string;
-}
-
-export default class UserInputModal extends React.PureComponent<UserInputModalProps, UserInputState> {
+export default class UserInputModal extends React.PureComponent<UserInputModalProps, undefined> {
   constructor(props: UserInputModalProps) {
     super(props);
-
-    this.state = {
-      value: ""
-    };
 
     this.triggerCallback = this.triggerCallback.bind(this);
     this.callIfDefined = this.callIfDefined.bind(this);
     this.setValue = this.setValue.bind(this);
   }
 
-  callIfDefined(callBack: (value?: string) => void, value?: string) {
+  callIfDefined(callBack: (value?: string) => void) {
     if (callBack) {
-      callBack(value);
+      callBack();
     }
   }
 
@@ -42,7 +34,7 @@ export default class UserInputModal extends React.PureComponent<UserInputModalPr
 
   triggerCallback(choice: boolean) {
     if (choice) {
-      this.callIfDefined(this.props.yesCallBack, this.state.value);
+      this.callIfDefined(this.props.yesCallBack);
     }
     else {
       this.callIfDefined(this.props.noCallBack);
